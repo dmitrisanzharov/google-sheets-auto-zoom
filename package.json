@@ -26,7 +26,7 @@
   "manifest": {
     "name": "aaa_Google sheets auto zoom",
     "host_permissions": [
-      "https://*/*"
+      "https://docs.google.com/spreadsheets/d/1pXh3KriF1L5yaB8K2ERCe9Kw5i6vOwm1y_3bh_Ocfaw/*"
     ]
   }
 }
