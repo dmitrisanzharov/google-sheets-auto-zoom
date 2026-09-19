@@ -1,5 +1,5 @@
 {
-  "name": "google-sheets-auto-zoom",
+  "name": "aaa_google-sheets-auto-zoom",
   "displayName": "Google sheets auto zoom",
   "version": "0.0.1",
   "description": "google-sheets-auto-zoom",
@@ -24,7 +24,7 @@
     "typescript": "5.3.3"
   },
   "manifest": {
-    "name": "Google sheets auto zoom",
+    "name": "aaa_Google sheets auto zoom",
     "host_permissions": [
       "https://*/*"
     ]
