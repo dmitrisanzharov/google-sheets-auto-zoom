@@ -66,6 +66,16 @@ function IndexPopup() {
 
       <div
         style={{
+          marginBottom: 12,
+          color: activeZoom === null ? "#6b7280" : "#111827",
+          fontSize: 12,
+          fontWeight: 600
+        }}>
+        {activeZoom === null ? "❌ Not set" : `Saved: ${activeZoom}%`}
+      </div>
+
+      <div
+        style={{
           display: "grid",
           gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
           gap: 8
