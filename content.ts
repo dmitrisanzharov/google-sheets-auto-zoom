@@ -1,30 +1,25 @@
-function setZoom(zoom: number) {
-    const zoomControl = document.querySelector<HTMLElement>("#t-zoom")
+import { setZoomFn } from "./helper/setZoomFn";
+import {
+  getGoogleSheetIdFromUrl,
+  getSavedZoomForSheet
+} from "./helper/zoomStorage";
+import { DEFAULT_ZOOM } from "./constants";
 
-    if (!zoomControl) {
-        console.error("Zoom control not found")
-        return
-    }
+chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+  if (message?.type === "set-zoom" && typeof message.zoom === "number") {
+    setZoomFn(message.zoom);
+    sendResponse({ ok: true });
+  }
 
-    zoomControl.click()
+  return true;
+});
 
-    setTimeout(() => {
-        console.log('Setting zoom to', zoom, '%');
-        const options = [
-            ...document.querySelectorAll<HTMLElement>('[role="option"]')
-        ]
+const googleSheetId = getGoogleSheetIdFromUrl(window.location.href)
 
-        const option = options.find(
-            (el) => el.getAttribute("aria-label") === `${zoom}%`
-        )
-
-        if (!option) {
-            console.error(`Zoom option ${zoom}% not found`)
-            return
-        }
-
-        option.click()
-    }, 100)
+if (googleSheetId) {
+  getSavedZoomForSheet(googleSheetId).then((zoom) => {
+    setZoomFn(zoom ?? DEFAULT_ZOOM)
+  })
+} else {
+  setZoomFn(DEFAULT_ZOOM)
 }
-
-setZoom(125)
