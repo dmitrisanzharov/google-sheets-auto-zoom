@@ -27,7 +27,7 @@
     "name": "aaa_Google sheets auto zoom",
     "permissions": [
       "storage",
-      "tabs"
+      "activeTab"
     ],
     "host_permissions": [
       "https://docs.google.com/spreadsheets/*"
