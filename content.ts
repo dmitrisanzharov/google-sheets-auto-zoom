@@ -9,4 +9,4 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   return true;
 });
 
-setZoomFn(75);
+setZoomFn(100);
