@@ -1,18 +1,62 @@
+import { useEffect, useState } from "react"
+
+import {
+  getGoogleSheetIdFromUrl,
+  getSavedZoomForSheet,
+  setStoredSheetZoomEntry
+} from "./helper/zoomStorage"
+
 const zoomOptions = [50, 75, 90, 100, 125, 150, 200]
 
 function IndexPopup() {
-  const setZoom = (zoom: number) => {
+  const [activeZoom, setActiveZoom] = useState<number | null>(null)
+
+  useEffect(() => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const activeTab = tabs[0]
+      const googleSheetId = getGoogleSheetIdFromUrl(activeTab?.url)
+
+      if (!googleSheetId) {
+        return
+      }
+
+      getSavedZoomForSheet(googleSheetId).then((zoom) => {
+        setActiveZoom(zoom)
+      })
+    })
+  }, [])
+
+  const setZoom = (zoom: number) => {
+    chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
       const activeTab = tabs[0]
 
       if (!activeTab?.id) {
         return
       }
 
-      chrome.tabs.sendMessage(activeTab.id, {
-        type: "set-zoom",
-        zoom
-      })
+      const googleSheetId = getGoogleSheetIdFromUrl(activeTab.url)
+
+      if (!googleSheetId) {
+        console.warn("Google Sheet ID not found for current tab URL:", activeTab.url)
+        return
+      }
+
+      await setStoredSheetZoomEntry(googleSheetId, zoom)
+      setActiveZoom(zoom)
+
+      chrome.tabs.sendMessage(
+        activeTab.id,
+        {
+          type: "set-zoom",
+          zoom
+        },
+        () => {
+          const error = chrome.runtime.lastError
+          if (error) {
+            console.warn("Failed to send zoom message:", error.message)
+          }
+        }
+      )
     })
   }
 
@@ -34,7 +78,8 @@ function IndexPopup() {
               padding: "8px 0",
               border: "1px solid #d0d7de",
               borderRadius: 6,
-              background: "#ffffff",
+              background: activeZoom === value ? "#e6f4ff" : "#ffffff",
+              borderColor: activeZoom === value ? "#1a73e8" : "#d0d7de",
               cursor: "pointer",
               fontWeight: 600
             }}>

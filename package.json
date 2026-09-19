@@ -25,8 +25,12 @@
   },
   "manifest": {
     "name": "aaa_Google sheets auto zoom",
+    "permissions": [
+      "storage",
+      "tabs"
+    ],
     "host_permissions": [
-      "https://docs.google.com/spreadsheets/d/1pXh3KriF1L5yaB8K2ERCe9Kw5i6vOwm1y_3bh_Ocfaw/*"
+      "https://docs.google.com/spreadsheets/*"
     ]
   }
 }
